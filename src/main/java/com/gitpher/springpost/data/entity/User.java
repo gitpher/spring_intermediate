@@ -1,6 +1,7 @@
 package com.gitpher.springpost.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,17 +24,19 @@ public class User extends Timestamped {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     @JsonIgnore
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    private Authority authority;
 
-    public User(String nickname, String password) {
+    @Builder
+    public User(String nickname, String password, Authority authority) {
         this.nickname = nickname;
         this.password = password;
-        this.role = UserRoleEnum.USER;
+        this.authority = authority;
     }
 }
