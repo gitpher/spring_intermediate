@@ -27,22 +27,15 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String author;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private String password;
-
-    public Post(PostRequestDto postRequestDto) {
+    public Post(PostRequestDto postRequestDto, String nickname) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.author = postRequestDto.getAuthor();
-        this.password = postRequestDto.getPassword();
+        this.author = nickname;
     }
 
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.author = postRequestDto.getAuthor();
-        this.password = postRequestDto.getPassword();
     }
 
 }

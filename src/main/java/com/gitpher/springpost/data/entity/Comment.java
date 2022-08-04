@@ -32,23 +32,16 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private Long postId;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private String password;
 
-
-    public Comment(CommentRequestDto commentRequestDto) {
-        this.author = commentRequestDto.getAuthor();
+    public Comment(CommentRequestDto commentRequestDto, String nickname) {
+        this.author = nickname;
         this.content = commentRequestDto.getContent();
         this.postId = commentRequestDto.getPostId();
-        this.password = commentRequestDto.getPassword();
     }
 
     public void update(CommentRequestDto commentRequestDto) {
-        this.author = commentRequestDto.getAuthor();
         this.content = commentRequestDto.getContent();
         this.postId = commentRequestDto.getPostId();
-        this.password = commentRequestDto.getPassword();
     }
 
 
