@@ -41,29 +41,28 @@ public class UserService {
         String password2 = requestDto.getPassword2();
         Authority authority = Authority.ROLE_USER;
 
-        // 회원 ID 중복 확인
-        Optional<User> found = userRepository.findByNickname(nickname);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
-        }
         // 회원가입 조건
+        Optional<User> found = userRepository.findByNickname(nickname);
+        if (nickname.equals("")) {
+            return ResponseDto.fail("NICKNAME_FORMAT_ERROR", "닉네임을 입력해주세요.");
+        }
+        if (found.isPresent()) {
+            return ResponseDto.fail("NICKNAME_ALREADY_EXIST", "중복된 사용자 ID 가 존재합니다.");
+        }
         if (nickname.length() < 4) {
-            throw new RuntimeException("닉네임은 4자 이상이어야 합니다.");
+            return ResponseDto.fail("NICKNAME_FORMAT_ERROR", "닉네임은 4자 이상이어야 합니다.");
         }
         if (!Pattern.matches(pattern, nickname)) {
-            throw new RuntimeException("닉네임과 비밀번호 형식을 확인해주세요.");
+            return ResponseDto.fail("NICKNAME_FORMAT_ERROR", "닉네임과 형식을 확인해주세요.");
+        }
+        if (!Pattern.matches(pattern, password1)) {
+            return ResponseDto.fail("PASSWORD_FORMAT_ERROR", "비밀번호 형식을 확인해주세요.");
         }
         if (!password1.equals(password2)) {
-            throw new RuntimeException("비밀번호가 서로 일치하지 않습니다.");
+            return ResponseDto.fail("PASSWORDS_MISMATCH", "비밀번호가 서로 일치하지 않습니다.");
         }
         if (password1.length() < 4) {
-            throw new RuntimeException("비밀번호는 4자 이상이어야 합니다.");
-        }
-        if (nickname.equals("")) {
-            throw new RuntimeException("닉네임을 입력해주세요");
-        }
-        if (nickname.equals(null)) {
-            throw new RuntimeException("닉네임을 입력해주세요");
+            return ResponseDto.fail("PASSWORD_FORMAT_ERROR", "비밀번호는 4자 이상이어야 합니다.");
         }
 
         // 패스워드 암호화
